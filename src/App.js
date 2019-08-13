@@ -10,9 +10,29 @@ import './App.css';
 
 const App = () => {
   const [recording, setRecording] = useState(false);
+  const [audio, setAudio] = useState(null);
 
   const toggleRecording = () => {
-    setRecording(!recording);
+    if(audio) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  }
+
+  const startRecording = async () => {
+    const recording = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false
+    });
+    setAudio(recording);
+    setRecording(true);
+  }
+
+  const stopRecording = () => {
+    audio.getTracks().forEach(track => track.stop());
+    setAudio(null);
+    setRecording(false);
   }
 
   return (
@@ -34,7 +54,7 @@ const App = () => {
               onClick={toggleRecording}
             >
               <Icon name={recording ? 'stop' : 'play'} />
-              {recording ? 'Stop' : 'Record'}
+              {recording ? 'Stop Recording Audio' : 'Record Audio'}
             </Button>
           </Grid.Column>
         </Grid>
