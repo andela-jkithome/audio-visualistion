@@ -13,6 +13,7 @@ const AudioAnalyser = ({ audio }) => {
   useEffect(() => {
     audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
     analyser.current = audioContext.current.createAnalyser();
+    // analyser.current.fftSize = 256;
     dataArray.current = new Uint8Array(analyser.current.frequencyBinCount);
     source.current = audioContext.current.createMediaStreamSource(audio);
     source.current.connect(analyser.current);
