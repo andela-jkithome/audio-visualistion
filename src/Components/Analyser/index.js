@@ -1,39 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AudioVisualiser from '../Visualizer';
 
-class AudioAnalyser extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { audioData: new Uint8Array(0) };
+const AudioAnalyser = ({ audio }) => {
+  const audioContext = useRef(null);
+  const analyser = useRef(null);
+  const dataArray = useRef(null);
+  const source = useRef(null);
+  const rafId = useRef(null)
+
+  const [audioData, setAudioData] = useState(new Uint8Array(0));
+
+  useEffect(() => {
+    audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
+    analyser.current = audioContext.current.createAnalyser();
+    dataArray.current = new Uint8Array(analyser.current.frequencyBinCount);
+    source.current = audioContext.current.createMediaStreamSource(audio);
+    source.current.connect(analyser.current);
+    rafId.current = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafId.current);
+      analyser.current.disconnect();
+      source.current.disconnect();
+    };
+  },[]);
+
+  const tick = () => {
+    analyser.current.getByteTimeDomainData(dataArray.current);
+    setAudioData([...dataArray.current]);
+    rafId.current = requestAnimationFrame(tick);
   }
 
-  componentDidMount() {
-    this.audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
-    this.analyser = this.audioContext.createAnalyser();
-    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
-    this.source = this.audioContext.createMediaStreamSource(this.props.audio);
-    this.source.connect(this.analyser);
-    this.rafId = requestAnimationFrame(this.tick);
-  }
-
-  tick = () => {
-    this.analyser.getByteTimeDomainData(this.dataArray);
-    this.setState({ audioData: this.dataArray });
-    this.rafId = requestAnimationFrame(this.tick);
-  }
-
-  componentWillUnmount() {
-    cancelAnimationFrame(this.rafId);
-    this.analyser.disconnect();
-    this.source.disconnect();
-  }
-
-  render () {
-    return (
-      <AudioVisualiser audioData={this.state.audioData} />
-    )
-  }
+  return (
+    <AudioVisualiser audioData={audioData} />
+  )
 }
 
 export default AudioAnalyser;

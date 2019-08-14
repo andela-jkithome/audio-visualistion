@@ -61,7 +61,9 @@ const App = () => {
         </Grid>
       </Container>
       <Container style={{ marginTop: '7em' }}>
-        {audio ? <AudioAnalyser audio={audio} /> : ''}
+        {audio && (
+          <AudioAnalyser audio={audio} />
+        )}
       </Container>
     </div>
   );
