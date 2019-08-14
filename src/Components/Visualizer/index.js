@@ -15,8 +15,10 @@ const AudioVisualiser = ({ audioData }) => {
     let x = 0;
     const sliceWidth = (width * 1.0) / audioData.length;
     ctx.lineWidth = 3;
-    ctx.strokeStyle = '#000000';
+    ctx.strokeStyle = '#00FF41';
     ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillRect(0, 0, width, height);
     ctx.beginPath();
     ctx.moveTo(0, height / 2);
     for (const item of audioData) {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AudioVisualiser from '../Visualizer';
+import BarAudioVisualizer from '../BarVisualizer';
 
 const AudioAnalyser = ({ audio }) => {
   const audioContext = useRef(null);
@@ -13,7 +14,7 @@ const AudioAnalyser = ({ audio }) => {
   useEffect(() => {
     audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
     analyser.current = audioContext.current.createAnalyser();
-    // analyser.current.fftSize = 256;
+    // analyser.current.fftSize = 256; //Use with Bar graph visualizer
     dataArray.current = new Uint8Array(analyser.current.frequencyBinCount);
     source.current = audioContext.current.createMediaStreamSource(audio);
     source.current.connect(analyser.current);
