@@ -7,6 +7,7 @@ import {
   Icon
 } from 'semantic-ui-react'
 import './App.css';
+import AudioAnalyser from './Components/Analyser';
 
 const App = () => {
   const [recording, setRecording] = useState(false);
@@ -58,6 +59,9 @@ const App = () => {
             </Button>
           </Grid.Column>
         </Grid>
+      </Container>
+      <Container style={{ marginTop: '7em' }}>
+        {audio ? <AudioAnalyser audio={audio} /> : ''}
       </Container>
     </div>
   );

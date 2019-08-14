@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
+import AudioVisualiser from '../Visualizer';
 
 class AudioAnalyser extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class AudioAnalyser extends Component {
 
   render () {
     return (
-      <textarea value={this.state.audioData} />
+      <AudioVisualiser audioData={this.state.audioData} />
     )
   }
 }
